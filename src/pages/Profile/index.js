@@ -10,6 +10,7 @@ import {AuthContext} from '../../contexts/auth'
 
 import { db, storage } from '../../services/firebaseConnection'
 import { doc, updateDoc } from 'firebase/firestore'
+import { ref, uploadBytes,  getDownloadURL } from 'firebase/storage'
 
 import './profile.css';
 
@@ -23,6 +24,7 @@ export default function Profile(){
   const [ name, setName ] = useState(user && user.name)
   const [ email, setEmail ] = useState(user && user.email)
 
+
   function handleFile(e) {
     if (e.target.files[0]) {
       const image = e.target.files[0]
@@ -31,17 +33,46 @@ export default function Profile(){
         setImageAvatar(image)
         setAvatarUrl(URL.createObjectURL(image))
       } else {
-        toast.error("Envie uma image do tipo PNG ou JPEG!");
+        toast.error("Envie uma image do tipo PNG ou JPEG! 😥");
         setImageAvatar(null)
         return;
       }
     }
   }
 
+  async function handleUpload(e) {
+    const currentUid = user.uid
+    
+    const uploadRef = ref(storage, `images/${currentUid}/${imageAvatar.name}`)
+    const uploadTask = uploadBytes(uploadRef, imageAvatar).then((snapshot) => {
+        getDownloadURL(snapshot.ref).then( async (downloadURL) => {
+        let urlFoto = downloadURL
+
+        const docRef = doc(db, 'users', user.uid)
+        await updateDoc(docRef, {
+          avatarUrl: urlFoto,
+          name:  name
+        }).then(() => {
+          let data = {
+            ...user,
+            name: name,
+            avatarUrl: urlFoto,
+          }
+  
+          setUser(data);
+          storageUser(data);
+          toast.success('Atualizado com sucesso! 😊')
+
+        })
+      })
+      
+    })
+  }
+
   async function handleSubmit(e) {
     e.preventDefault();
 
-    if (imageAvatar === null && name === '') {
+    if (imageAvatar === null && name !== '') {
       const docRef = doc(db, 'users', user.uid)
       await updateDoc(docRef, {
         name: name,
@@ -53,11 +84,11 @@ export default function Profile(){
 
         setUser(data);
         storageUser(data);
-        toast.success('Atualizado com sucesso')
-      }).catch((error) => {
-        // toast.error('Erro ao atualizar')
-        console.log(error);
+        toast.success('Atualizado com sucesso! 😊')
+
       })
+    } else if (name !== '' && imageAvatar !== null) {
+      handleUpload()
     }
   }
 

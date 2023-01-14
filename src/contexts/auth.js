@@ -54,13 +54,13 @@ function AuthProvider({ children }){
       setUser(data);
       storageUser(data);
       setLoadingAuth(false);
-      toast.success("Bem-vindo(a) de volta!")
+      toast.success("Bem-vindo(a) de volta! 😊")
       navigate("/dashboard")
     })
     .catch((error) => {
       console.log(error);
       setLoadingAuth(false);
-      toast.error("Ops algo deu errado!");
+      toast.error("Ops algo deu errado! 😥");
     }) 
 
   }
@@ -90,7 +90,7 @@ function AuthProvider({ children }){
           setUser(data);
           storageUser(data);
           setLoadingAuth(false);
-          toast.success("Seja bem-vindo ao sistema!")
+          toast.success("Seja bem-vindo ao sistema! ❤️")
           navigate("/dashboard")
           
         })
