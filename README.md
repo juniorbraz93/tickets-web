@@ -2,6 +2,12 @@
 
 Sistema web para registrar chamados simples.
 
+<div style="display: flex; flex-direction: row;">
+  <img align="center" height="600" width="800" src="./src/assets/imgs/img3.png">
+  <img align="center" height="600" width="800" src="./src/assets/imgs/img6.png">
+  <img align="center" height="600" width="800" src="./src/assets/imgs/img7.png">
+</div>
+
 ### Tec/frameworks/Libs
 
 - reactjs

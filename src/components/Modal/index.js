@@ -3,7 +3,6 @@ import './modal.css';
 import { FiX } from 'react-icons/fi'
 
 export default function Modal({ content, close }) {
-  console.log(content);
  return (
    <div className="modal">
     <div className="container">
